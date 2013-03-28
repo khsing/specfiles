@@ -7,7 +7,7 @@
 #
 # QA_RPATHS=[0-7] rpmbuild -bb ~/rpmbuild/SPECS/collectd-5.2.spec
 
-%define python_path /usr/bin/python26
+%define python_path %{_bindir}/python
 
 AutoReqProv: no
 Summary:	Statistics collection daemon for filling RRD files.
@@ -18,7 +18,7 @@ Source:		http://collectd.org/files/%{name}-%{version}.tar.gz
 License:	GPL
 Group:		System Environment/Daemons
 BuildRoot:	%{_tmppath}/%{name}-%{version}-root
-BuildPrereq:	curl-devel, libesmtp-devel, libmemcached-devel, net-snmp-devel, OpenIPMI-devel, libpcap-devel, librabbitmq-devel lm_sensors-devel, libevent-devel, libgcrypt-devel, openssl-devel, jdk
+BuildRequires:	curl-devel, libesmtp-devel, libmemcached-devel, net-snmp-devel, OpenIPMI-devel, libpcap-devel, librabbitmq-devel lm_sensors-devel, libevent-devel, libgcrypt-devel, openssl-devel, 
 Vendor:		collectd development team <collectd@verplant.org>
 
 %description
@@ -34,7 +34,7 @@ rm -rf $RPM_BUILD_ROOT
 %setup
 
 %build
-./configure CFLAGS=-"DLT_LAZY_OR_NOW='RTLD_LAZY|RTLD_GLOBAL'" --prefix=%{_prefix} --sbindir=%{_sbindir} --mandir=%{_mandir} --libdir=%{_libdir} --sysconfdir=%{_sysconfdir} --enable-java --with-python=%{python_path} --disable-battery  --disable-rpath
+./configure CFLAGS=-"DLT_LAZY_OR_NOW='RTLD_LAZY|RTLD_GLOBAL'" --prefix=%{_prefix} --sbindir=%{_sbindir} --mandir=%{_mandir} --libdir=%{_libdir} --sysconfdir=%{_sysconfdir} --with-python=%{python_path} --disable-battery  --disable-rpath
 make
 
 %install
@@ -43,8 +43,8 @@ mkdir -p $RPM_BUILD_ROOT/etc/collectd/collectd.d
 mkdir -p $RPM_BUILD_ROOT/var/lib/collectd
 mkdir -p $RPM_BUILD_ROOT/etc/rc.d/init.d
 
-install -d -m 755 %{buildroot}/%{_initrddir}
-install    -m 755 %_sourcedir/collectd     %{buildroot}/%{_initrddir}/collectd
+install -d -m 755 $RPM_BUILD_ROOT/%{_initrddir}
+install    -m 755 contrib/redhat/init.d-collectd    $RPM_BUILD_ROOT/%{_initrddir}/collectd
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -73,8 +73,8 @@ exit 0
 %attr(0644,root,root) %{_libdir}/%{name}/*.so* 
 %attr(0644,root,root) %{_libdir}/%{name}/*.la
 %attr(0644,root,root) %{_libdir}/libcollectdclient.*
-%attr(0644,root,root) /usr/include/collectd/client.h
-%attr(0644,root,root) /usr/include/collectd/lcc_features.h
+%attr(0644,root,root) %{_includedir}/collectd/client.h
+%attr(0644,root,root) %{_includedir}/collectd/lcc_features.h
 %attr(0644,root,root) %{_libdir}/libcollectdclient.*
 %attr(0644,root,root) %{_libdir}/pkgconfig/libcollectdclient.pc
 %attr(0644,root,root) %{_mandir}/man1/*
@@ -87,18 +87,18 @@ exit 0
 %attr(0644,root,root) %{_datadir}/%{name}/types.db
 %config %attr(0644,root,root) /etc/collectd.conf
 %attr(0755,root,root) /etc/rc.d/init.d/collectd
-%attr(0644,root,root) /usr/include/collectd/*.h
-%exclude %{_libdir}/perl5/5.8.8/%{_arch}-linux-thread-multi/perllocal.pod
-%attr(0644,root,root) %{_libdir}/perl5/site_perl/5.8.8/%{_arch}-linux-thread-multi/auto/Collectd/.packlist
+%attr(0644,root,root) %{_includedir}/collectd/*.h
+%attr (0644,root,root) /usr/lib64/perl5/5.8.8/%{_arch}-linux-thread-multi/perllocal.pod
+%attr(0644,root,root) /usr/lib64/perl5/site_perl/5.8.8/%{_arch}-linux-thread-multi/auto/Collectd/.packlist
 %attr(0644,root,root) /usr/lib/perl5/site_perl/5.8.8/Collectd.pm
 %attr(0644,root,root) /usr/lib/perl5/site_perl/5.8.8/Collectd/Unixsock.pm
 %attr(0644,root,root) /usr/lib/perl5/site_perl/5.8.8/Collectd/Plugins/OpenVZ.pm
 %attr(0644,root,root) /usr/share/man/man3/Collectd::Unixsock.3pm.gz
-%exclude /usr/share/collectd/postgresql_default.conf
+%attr(0644,root,root) %{_datadir}/collectd/postgresql_default.conf
 
 %dir /var/lib/collectd
-%attr(0644,root,root) /usr/share/collectd/java/collectd-api.jar
-%attr(0644,root,root) /usr/share/collectd/java/generic-jmx.jar
+#%attr(0644,root,root) /usr/share/collectd/java/collectd-api.jar
+#%attr(0644,root,root) /usr/share/collectd/java/generic-jmx.jar
 
 %dir /etc/collectd/collectd.d
 
