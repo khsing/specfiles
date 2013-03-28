@@ -1,7 +1,7 @@
 %define name python27-setuptools
 %define version 0.6c11
 %define unmangled_version 0.6c11
-%define release milford
+%define release k0
 
 Summary: Download, build, install, upgrade, and uninstall Python packages -- easily!
 Name: %{name}
@@ -193,28 +193,28 @@ python2.7 setup.py build
 python2.7 setup.py install --single-version-externally-managed --root=$RPM_BUILD_ROOT 
 # --record=INSTALLED_OBJECTS
 # Lets not overwrite the default one in CentOS/RHEL
-rm -f $RPM_BUILD_ROOT/usr/bin/easy_install
+# rm -f $RPM_BUILD_ROOT/usr/bin/easy_install
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files 
 #-f INSTALLED_OBJECTS
-/usr/lib/python2.7/site-packages/easy_install.pyo
-/usr/lib/python2.7/site-packages/pkg_resources.pyo
-/usr/lib/python2.7/site-packages/site.pyo
-/usr/lib/python2.7/site-packages/pkg_resources.py
-/usr/lib/python2.7/site-packages/easy_install.py
-/usr/lib/python2.7/site-packages/site.py
-/usr/lib/python2.7/site-packages/setuptools/
-/usr/lib/python2.7/site-packages/pkg_resources.pyc
-/usr/lib/python2.7/site-packages/easy_install.pyc
-/usr/lib/python2.7/site-packages/site.pyc
-/usr/lib/python2.7/site-packages/setuptools/tests/
-/usr/lib/python2.7/site-packages/setuptools/command/
-/usr/lib/python2.7/site-packages/setuptools-0.6c11-py2.7.egg-info
-/usr/bin/easy_install-2.7
-#/usr/bin/easy_install
+%{_libdir}/python2.7/site-packages/easy_install.pyo
+%{_libdir}/python2.7/site-packages/pkg_resources.pyo
+%{_libdir}/python2.7/site-packages/site.pyo
+%{_libdir}/python2.7/site-packages/pkg_resources.py
+%{_libdir}/python2.7/site-packages/easy_install.py
+%{_libdir}/python2.7/site-packages/site.py
+%{_libdir}/python2.7/site-packages/setuptools/
+%{_libdir}/python2.7/site-packages/pkg_resources.pyc
+%{_libdir}/python2.7/site-packages/easy_install.pyc
+%{_libdir}/python2.7/site-packages/site.pyc
+%{_libdir}/python2.7/site-packages/setuptools/tests/
+%{_libdir}/python2.7/site-packages/setuptools/command/
+%{_libdir}/python2.7/site-packages/setuptools-0.6c11-py2.7.egg-info
+%{_bindir}/easy_install-2.7
+%{_bindir}/easy_install
 
 %defattr(-,root,root)
 %doc setuptools.txt EasyInstall.txt pkg_resources.txt README.txt
